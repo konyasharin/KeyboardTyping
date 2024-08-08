@@ -1,0 +1,18 @@
+.up_block{
+    display: flex;
+    gap: 50px;
+    align-items: center;
+}
+
+.buttons{
+    display: flex;
+    gap: 20px;
+}
+
+.button_disabled{
+    background-color: var(--color_white);
+}
+
+.button_active{
+    background-color: var(--color_orange);
+}
