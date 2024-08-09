@@ -1,0 +1,15 @@
+.symbol.correct{
+    color: var(--color_white);
+}
+
+.symbol.incorrect{
+    color: var(--color_red);
+}
+
+.symbol.notTyped{
+    color: var(--color_black_light);
+}
+
+.space_incorrect{
+    text-decoration: underline;
+}

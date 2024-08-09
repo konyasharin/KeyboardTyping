@@ -16,3 +16,15 @@
 .button_active{
     background-color: var(--color_orange);
 }
+
+.page .correct_symbol{
+    color: var(--color_white);
+}
+
+.page .incorrect_symbol{
+    color: var(--color_red);
+}
+
+.page .not_typed_symbol{
+    color: var(--color_black_light);
+}

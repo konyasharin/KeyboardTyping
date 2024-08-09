@@ -1,6 +1,17 @@
 .button{
+    border: none;
+    cursor: pointer;
+}
+
+.primary{
     background-color: var(--color_white);
+}
+
+.default{
+    background-color: transparent;
+}
+
+.button.primary{
     border-radius: 20px;
     padding: 15px 30px;
-    border: none;
 }

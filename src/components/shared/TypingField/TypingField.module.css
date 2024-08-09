@@ -1,0 +1,13 @@
+.input{
+    background-color: transparent;
+    border: none;
+    outline: none;
+    color: transparent;
+    position: absolute;
+}
+
+.words_field{
+    margin-top: 65px;
+    margin-bottom: 50px;
+    text-align: justify;
+}
