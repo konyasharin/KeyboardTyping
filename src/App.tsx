@@ -7,12 +7,14 @@ import { ResultsPage } from '@/pages/ResultsPage/ResultsPage.tsx';
 
 const App = () => {
   return (
-    <Container>
-      <Routes>
-        <Route path={TYPING} element={<TypingPage />} />
-        <Route path={RESULTS} element={<ResultsPage />} />
-      </Routes>
-    </Container>
+    <main className={'main'}>
+      <Container className={'main_container'}>
+        <Routes>
+          <Route path={TYPING} element={<TypingPage />} />
+          <Route path={RESULTS} element={<ResultsPage />} />
+        </Routes>
+      </Container>
+    </main>
   );
 };
 

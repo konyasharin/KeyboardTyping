@@ -39,3 +39,13 @@ button{
 .text_upper, .text{
     color: var(--color_white);
 }
+
+@media(max-width: 767px) {
+    .text, button{
+        font-size: 20px;
+    }
+
+    .text_upper{
+        font-size: 28px;
+    }
+}

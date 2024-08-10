@@ -1,7 +1,8 @@
 import { Symbol } from '@/components/shared/Symbol/Symbol.tsx';
-import { FC, memo, useRef } from 'react';
+import { FC, memo } from 'react';
 import { CheckedSymbol } from '@/hooks/useTypingTest.ts';
 import styles from './TypingField.module.css';
+import { useClickOutside } from '@/hooks/useClickOutside.ts';
 
 type TypingFieldProps = {
   setTyped: (value: string) => void;
@@ -10,9 +11,9 @@ type TypingFieldProps = {
 };
 
 export const TypingField: FC<TypingFieldProps> = memo(props => {
-  const inputRef = useRef<HTMLInputElement | null>(null);
+  const { ref } = useClickOutside<HTMLInputElement>(() => ref.current?.focus());
   return (
-    <>
+    <div className={styles.block}>
       <label htmlFor="input-plug">
         <div className={styles.words_field}>
           {props.checked.map((checked, i) => {
@@ -23,17 +24,21 @@ export const TypingField: FC<TypingFieldProps> = memo(props => {
       <input
         className={styles.input}
         type="text"
-        ref={inputRef}
+        ref={ref}
+        autoComplete={'off'}
+        autoCorrect={'off'}
+        autoCapitalize={'off'}
         id={'input-plug'}
         onChange={e => props.setTyped(e.target.value)}
         onKeyDown={() => {
-          inputRef.current?.setSelectionRange(
+          ref.current?.setSelectionRange(
             props.typed.length,
             props.typed.length,
           );
         }}
+        onPaste={e => e.preventDefault()}
         value={props.typed}
       />
-    </>
+    </div>
   );
 });

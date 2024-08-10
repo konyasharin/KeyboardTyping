@@ -1,0 +1,24 @@
+.text{
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 50px;
+}
+
+.text .errors{
+    color: var(--color_red);
+}
+
+.restart_button{
+    margin: 0 auto;
+    width: 64px;
+    height: 64px;
+}
+
+@media(max-width: 767px) {
+    .restart_button{
+        height: 48px;
+        width: 48px;
+    }
+}

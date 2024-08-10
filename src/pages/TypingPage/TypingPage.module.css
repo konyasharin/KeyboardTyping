@@ -28,3 +28,16 @@
 .page .not_typed_symbol{
     color: var(--color_black_light);
 }
+
+.button_restart{
+    margin: 0 auto;
+    height: 64px;
+    width: 64px;
+}
+
+@media(max-width:767px) {
+    .button_restart{
+        width: 48px;
+        height: 48px;
+    }
+}

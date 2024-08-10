@@ -38,7 +38,7 @@ export const TypingPage = () => {
         </div>
       </div>
       <TypingField setTyped={setTyped} typed={typed} checked={checked} />
-      <Button onClick={restart}>
+      <Button onClick={restart} className={styles.button_restart}>
         <RestartIcon />
       </Button>
     </section>

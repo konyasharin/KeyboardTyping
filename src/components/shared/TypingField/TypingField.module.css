@@ -4,10 +4,17 @@
     outline: none;
     color: transparent;
     position: absolute;
+    opacity: 0;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 .words_field{
     margin-top: 65px;
     margin-bottom: 50px;
     text-align: justify;
+}
+
+.block{
+    position: relative;
 }

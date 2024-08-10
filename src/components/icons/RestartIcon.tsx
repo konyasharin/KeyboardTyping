@@ -5,8 +5,6 @@ export const RestartIcon: FC<SVGAttributes<SVGElement>> = ({
 }) => {
   return (
     <svg
-      width="64.000000"
-      height="64.000000"
       viewBox="0 0 64 64"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
