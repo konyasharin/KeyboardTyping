@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useWords } from '@/hooks/useWords.ts';
 import { useCountdownTimer } from '@/hooks/useCountdownTimer.ts';
 import { useDispatch } from 'react-redux';
@@ -13,6 +13,15 @@ export type CheckedSymbol = {
   status: 'correct' | 'incorrect' | 'notTyped';
 };
 
+const generateChecked = (generatedSymbols: string[]) => {
+  const generated: (CheckedSymbol & { id: number })[] = [];
+  generatedSymbols.forEach((symbol, i) => {
+    generated.push({ symbol, status: 'notTyped', id: i });
+  });
+
+  return generated;
+};
+
 export const useTypingTest = (time: number) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -20,13 +29,13 @@ export const useTypingTest = (time: number) => {
   const [isActive, setIsActive] = useState(false);
   const [typed, setTyped] = useState('');
   const { generatedSymbols, updateSymbols } = useWords();
+  const [checked, setChecked] = useState(generateChecked(generatedSymbols));
   const {
     timer,
     setIsActive: setTimerIsActive,
     reset: resetTimer,
   } = useCountdownTimer(time, () => {
     setIsActive(false);
-    const checked = checkTyping();
     let errors = 0;
     let correct = 0;
     checked.forEach(elem => {
@@ -43,6 +52,10 @@ export const useTypingTest = (time: number) => {
     navigate(RESULTS);
   });
 
+  useEffect(() => {
+    checkTyping();
+  }, [typed]);
+
   const setIsActiveHandle = (newIsActive: boolean) => {
     setTimerIsActive(newIsActive);
     setIsActive(newIsActive);
@@ -55,38 +68,40 @@ export const useTypingTest = (time: number) => {
     dispatch(setResults(null));
   };
 
-  const setTypedHandle = (value: string) => {
-    if (!isActive && typed.length === 0) {
-      setIsActiveHandle(true);
-      setTyped(value);
-    }
-    if (!isActive) return;
-    if (value.length > generatedSymbols.length) {
-      updateSymbols();
-      setTyped('');
-      return;
-    }
-    return setTyped(value);
-  };
-
-  const checkTyping = (): CheckedSymbol[] => {
-    const checked: CheckedSymbol[] = [];
-    generatedSymbols.forEach((symbol, i) => {
-      if (i < typed.length) {
-        if (symbol === typed.charAt(i))
-          checked.push({ symbol, status: 'correct' });
-        else checked.push({ symbol, status: 'incorrect' });
-      } else {
-        checked.push({ symbol, status: 'notTyped' });
+  const setTypedHandle = useCallback(
+    (value: string) => {
+      if (!isActive && typed.length === 0) {
+        setIsActiveHandle(true);
+        setTyped(value);
       }
-    });
+      if (!isActive) return;
+      if (value.length > generatedSymbols.length) {
+        updateSymbols();
+        setTyped('');
+        return;
+      }
+      setTyped(value);
+    },
+    [generatedSymbols, isActive, typed],
+  );
 
-    return checked;
+  const checkTyping = () => {
+    setChecked(
+      checked.map((elem, i) => {
+        if (i <= typed.length - 1) {
+          if (elem.symbol === typed.charAt(i))
+            return { ...elem, status: 'correct' };
+          else return { ...elem, status: 'incorrect' };
+        } else {
+          return { ...elem, status: 'notTyped' };
+        }
+      }),
+    );
   };
 
   return {
     setTyped: setTypedHandle,
-    checkTyping,
+    checked,
     typed,
     generatedSymbols,
     setIsActive: setIsActiveHandle,

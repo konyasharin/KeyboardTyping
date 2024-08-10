@@ -1,21 +1,21 @@
 import { Symbol } from '@/components/shared/Symbol/Symbol.tsx';
-import {FC, memo} from 'react';
+import { FC, memo, useRef } from 'react';
 import { CheckedSymbol } from '@/hooks/useTypingTest.ts';
 import styles from './TypingField.module.css';
 
 type TypingFieldProps = {
   setTyped: (value: string) => void;
   typed: string;
-  checkTyping: () => CheckedSymbol[];
+  checked: CheckedSymbol[];
 };
 
 export const TypingField: FC<TypingFieldProps> = memo(props => {
-  console.log('rerender')
+  const inputRef = useRef<HTMLInputElement | null>(null);
   return (
     <>
       <label htmlFor="input-plug">
         <div className={styles.words_field}>
-          {props.checkTyping().map((checked, i) => {
+          {props.checked.map((checked, i) => {
             return <Symbol checked={checked} key={i} />;
           })}
         </div>
@@ -23,8 +23,15 @@ export const TypingField: FC<TypingFieldProps> = memo(props => {
       <input
         className={styles.input}
         type="text"
+        ref={inputRef}
         id={'input-plug'}
         onChange={e => props.setTyped(e.target.value)}
+        onKeyDown={() => {
+          inputRef.current?.setSelectionRange(
+            props.typed.length,
+            props.typed.length,
+          );
+        }}
         value={props.typed}
       />
     </>

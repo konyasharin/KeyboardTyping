@@ -11,8 +11,9 @@ import { TypingField } from '@/components/shared/TypingField/TypingField.tsx';
 export const TypingPage = () => {
   const timeVariants = [15, 30, 60];
   const { selected, setSelected } = useSelect(timeVariants.length);
-  const { setTyped, typed, checkTyping, timer, isActive, restart } =
-    useTypingTest(createTime({ seconds: timeVariants[selected] }));
+  const { setTyped, typed, checked, timer, isActive, restart } = useTypingTest(
+    createTime({ seconds: timeVariants[selected] }),
+  );
 
   return (
     <section className={styles.page}>
@@ -36,11 +37,7 @@ export const TypingPage = () => {
           })}
         </div>
       </div>
-      <TypingField
-        setTyped={setTyped}
-        typed={typed}
-        checkTyping={checkTyping}
-      />
+      <TypingField setTyped={setTyped} typed={typed} checked={checked} />
       <Button onClick={restart}>
         <RestartIcon />
       </Button>

@@ -1,5 +1,5 @@
 import { CheckedSymbol } from '@/hooks/useTypingTest.ts';
-import { FC } from 'react';
+import { FC, memo } from 'react';
 import styles from './Symbol.module.css';
 import clsx from 'clsx';
 
@@ -7,7 +7,14 @@ type SymbolProps = {
   checked: CheckedSymbol;
 };
 
-export const Symbol: FC<SymbolProps> = props => {
+const arePropsEqual = (oldProps: SymbolProps, newProps: SymbolProps) => {
+  return (
+    oldProps.checked.symbol === newProps.checked.symbol &&
+    oldProps.checked.status === newProps.checked.status
+  );
+};
+
+export const Symbol: FC<SymbolProps> = memo(props => {
   return (
     <span
       className={clsx(
@@ -22,4 +29,4 @@ export const Symbol: FC<SymbolProps> = props => {
       {props.checked.symbol}
     </span>
   );
-};
+}, arePropsEqual);
