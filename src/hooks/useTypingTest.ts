@@ -27,8 +27,10 @@ export const useTypingTest = (time: number) => {
   const navigate = useNavigate();
   const initialTime = useRef(time);
   const [isActive, setIsActive] = useState(false);
+  // typed содержит введенные символы
   const [typed, setTyped] = useState('');
   const { generatedSymbols, updateSymbols } = useWords();
+  // checked содержит уже проверенные введенные символы
   const [checked, setChecked] = useState(generateChecked(generatedSymbols));
   const {
     timer,

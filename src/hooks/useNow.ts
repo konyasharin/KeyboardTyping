@@ -1,10 +1,15 @@
-import {useEffect, useRef, useState} from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 type UseNowOptions = {
   updateTime?: number;
   callback?: () => void;
 };
 
+/**
+ * Хук для получения текущего времени, которое обновляется раз в updateTime времени
+ * @param isActive активно ли сейчас обновление текущего времени
+ * @param options необязательные параметры
+ */
 export const useNow = (isActive: boolean, options?: UseNowOptions) => {
   const [now, setNow] = useState(Date.now);
   const callbackRef = useRef(options?.callback);

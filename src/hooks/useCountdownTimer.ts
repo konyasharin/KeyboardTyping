@@ -10,6 +10,10 @@ export const useCountdownTimer = (
   onComplete: () => void,
   options?: UseCountdownTimerOptions,
 ) => {
+  /*
+  Таймер реализован через useNow, startAt и initialTime, чтобы интервал для обновления
+  времени при частом перезапуске не останавливал обновление времени
+   */
   const [startAt, setStartAt] = useState<number | null>(null);
   const { now } = useNow(startAt !== null, {
     updateTime: options?.updateTime,
