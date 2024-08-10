@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useWords } from '@/hooks/useWords.ts';
 import { useCountdownTimer } from '@/hooks/useCountdownTimer.ts';
 import { useDispatch } from 'react-redux';
@@ -30,6 +30,7 @@ export const useTypingTest = (time: number) => {
   // typed содержит введенные символы
   const [typed, setTyped] = useState('');
   const { generatedSymbols, updateSymbols } = useWords();
+  const [previousChecked, setPreviousChecked] = useState<typeof checked>([]);
   // checked содержит уже проверенные введенные символы
   const [checked, setChecked] = useState(generateChecked(generatedSymbols));
   const {
@@ -37,13 +38,17 @@ export const useTypingTest = (time: number) => {
     setIsActive: setTimerIsActive,
     reset: resetTimer,
   } = useCountdownTimer(time, () => {
-    setIsActive(false);
     let errors = 0;
     let correct = 0;
-    checked.forEach(elem => {
-      if (elem.status === 'incorrect') errors += 1;
-      if (elem.status === 'correct') correct += 1;
-    });
+    const calcResults = (elems: typeof checked) => {
+      elems.forEach(elem => {
+        if (elem.status === 'incorrect') errors += 1;
+        if (elem.status === 'correct') correct += 1;
+      });
+    };
+    setIsActive(false);
+    calcResults(checked);
+    calcResults(previousChecked);
 
     dispatch(
       setResults({
@@ -58,6 +63,10 @@ export const useTypingTest = (time: number) => {
     checkTyping();
   }, [typed]);
 
+  useEffect(() => {
+    setChecked(generateChecked(generatedSymbols));
+  }, [generatedSymbols]);
+
   const setIsActiveHandle = (newIsActive: boolean) => {
     setTimerIsActive(newIsActive);
     setIsActive(newIsActive);
@@ -70,22 +79,20 @@ export const useTypingTest = (time: number) => {
     dispatch(setResults(null));
   };
 
-  const setTypedHandle = useCallback(
-    (value: string) => {
-      if (!isActive && typed.length === 0) {
-        setIsActiveHandle(true);
-        setTyped(value);
-      }
-      if (!isActive) return;
-      if (value.length > generatedSymbols.length) {
-        updateSymbols();
-        setTyped('');
-        return;
-      }
+  const setTypedHandle = (value: string) => {
+    if (!isActive && typed.length === 0) {
+      setIsActiveHandle(true);
       setTyped(value);
-    },
-    [generatedSymbols, isActive, typed],
-  );
+    }
+    if (!isActive) return;
+    if (value.length >= generatedSymbols.length) {
+      setPreviousChecked([...previousChecked, ...checked]);
+      updateSymbols();
+      setTyped('');
+      return;
+    }
+    setTyped(value);
+  };
 
   const checkTyping = () => {
     setChecked(

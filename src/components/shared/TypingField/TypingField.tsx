@@ -1,5 +1,5 @@
 import { Symbol } from '@/components/shared/Symbol/Symbol.tsx';
-import { FC, memo } from 'react';
+import { FC } from 'react';
 import { CheckedSymbol } from '@/hooks/useTypingTest.ts';
 import styles from './TypingField.module.css';
 import { useClickOutside } from '@/hooks/useClickOutside.ts';
@@ -10,7 +10,7 @@ type TypingFieldProps = {
   checked: CheckedSymbol[];
 };
 
-export const TypingField: FC<TypingFieldProps> = memo(props => {
+export const TypingField: FC<TypingFieldProps> = props => {
   const { ref } = useClickOutside<HTMLInputElement>(() => ref.current?.focus());
   return (
     <div className={styles.block}>
@@ -41,4 +41,4 @@ export const TypingField: FC<TypingFieldProps> = memo(props => {
       />
     </div>
   );
-});
+};
